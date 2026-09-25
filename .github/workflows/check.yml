@@ -1,0 +1,26 @@
+name: check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Byte-compile
+        run: python -m compileall -q sc_dualsense
+      - name: Import all modules
+        run: python -c "import sc_dualsense, sc_dualsense.bridge, sc_dualsense.dualsense, sc_dualsense.ds_data, sc_dualsense.evdev, sc_dualsense.mapping, sc_dualsense.uhid"
+      - name: CLI help
+        run: |
+          python -m sc_dualsense --help
+          for cmd in run selftest watch list; do python -m sc_dualsense "$cmd" --help; done
+          sh bin/sc-dualsense --help

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Thin launcher so the daemon can run from anywhere without installing.
+cd "$(dirname "$(readlink -f "$0")")/.." || exit 1
+exec python3 -m sc_dualsense "$@"

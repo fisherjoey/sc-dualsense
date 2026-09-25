@@ -1,0 +1,17 @@
+[Unit]
+Description=Steam Controller -> virtual DualSense bridge (UHID)
+# Needs Steam running (the source is Steam Input's virtual X-Box pad) and
+# /dev/uhid writable by this user.
+After=graphical-session.target
+ConditionPathExists=/dev/uhid
+
+[Service]
+Type=simple
+# Change this path if you cloned the repo somewhere else.
+ExecStart=%h/.local/share/sc-dualsense/bin/sc-dualsense run
+Restart=on-failure
+RestartSec=3
+Nice=-5
+
+[Install]
+WantedBy=default.target
